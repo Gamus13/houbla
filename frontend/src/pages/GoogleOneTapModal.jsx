@@ -41,14 +41,24 @@ const GoogleOneTapModal = () => {
     }
   };
 
+  // const saveUsersInfoAsJSON = async (userInfo) => {
+  //   try {
+  //     const response = await axios.post('https://houbla-backend.vercel.app//save-json', userInfo);
+  //     console.log('Save response:', response.data);
+  //   } catch (error) {
+  //     console.error('Error saving data:', error);
+  //   }
+  // };
+
   const saveUsersInfoAsJSON = async (userInfo) => {
     try {
-      const response = await axios.post('http://localhost:5000/save-json', userInfo);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/save-json`, userInfo);
       console.log('Save response:', response.data);
     } catch (error) {
       console.error('Error saving data:', error);
     }
   };
+  
 
   return null;
 };
