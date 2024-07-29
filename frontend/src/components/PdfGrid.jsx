@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { pdfFiles } from './pdfFiles'; // Assurez-vous que le chemin est correct
 import { useAuth } from '../contexts/AuthContext';
@@ -9,22 +10,15 @@ const PdfGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Nombre d'éléments par page
 
-  // Log pour vérifier l'état d'authentification
-  console.log('isAuthenticated:', isAuthenticated);
-
   const handleSearch = () => {
     if (!isAuthenticated) return; // Ne pas permettre la recherche si non authentifié
-
-    console.log('Search Query:', searchQuery); // Log pour vérifier la requête de recherche
 
     const normalizedQuery = searchQuery.toLowerCase();
     const result = pdfFiles.filter(file => file.name.toLowerCase().includes(normalizedQuery));
     
     if (result.length > 0) {
-      console.log('Search Result:', result); // Log pour vérifier les résultats de recherche
       setSearchResult(result);
     } else {
-      console.log('No books found'); // Log si aucun livre n'est trouvé
       setSearchResult('No book found');
     }
     setCurrentPage(1); // Réinitialise la page actuelle à 1 lors d'une nouvelle recherche
@@ -36,14 +30,8 @@ const PdfGrid = () => {
     currentPage * itemsPerPage
   );
 
-  // Log pour vérifier les éléments affichés sur la page actuelle
-  console.log('Current Items:', currentItems);
-
   // Calculer le nombre total de pages
   const totalPages = Math.ceil((searchResult === 'No book found' ? 0 : (searchResult || pdfFiles).length) / itemsPerPage);
-
-  // Log pour vérifier le nombre total de pages
-  console.log('Total Pages:', totalPages);
 
   return (
     <div className="p-4">
@@ -85,11 +73,6 @@ const PdfGrid = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {currentItems.map((file, index) => {
                   const imageName = file.name.replace('.pdf', ''); // Supprime l'extension .pdf pour obtenir le nom de l'image
-                  
-                  // Log pour vérifier le nom de l'image et l'URL du fichier
-                  console.log('File Image Name:', imageName);
-                  console.log('File URL:', file.url);
-
                   return (
                     <div key={index} className="relative w-full max-w-xs mx-auto">
                       <img

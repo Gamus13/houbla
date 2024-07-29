@@ -56,7 +56,8 @@ const GoogleOneTapModal = () => {
     }
 };
 return null;
-};
+
+};  // Fin de la fonction GoogleOneTapModal
 
 
 export default GoogleOneTapModal;
