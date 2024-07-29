@@ -70,5 +70,9 @@ export const pdfFiles = [
   name: 'Vienot P., Blondel C., Colatrella T., Gautier S., Touraine A. - La gouvernance des entreprises familiales_ 77 Conseils pratiques aux administrateurs, actionnaires et dirigeants-Eyrolles (2007)(biblio-sciences.org)',
   url: 'https://drive.google.com/file/d/1a8AaAD11uszy_Ka932xym3R5DLIZw3o4/view?usp=drive_link', // Remplacez FILE_ID2 par l'ID réel du fichier
 },
-  // Ajoutez d'autres fichiers ici
+{
+  name: 'De quoi Total est-elle la somme - Alain Deneault [BIBLIO-SCIENCES.ORG]',
+  url: 'https://drive.google.com/file/d/1E8SEdtklYSmsPenqmo-Q2uFjJhUGxIt1/view?usp=drive_link', // Remplacez FILE_ID2 par l'ID réel du fichier
+},
+  // Ajoutez d'autres fichiers ici 
 ];
