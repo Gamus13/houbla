@@ -5,62 +5,50 @@ const bodyParser = require('body-parser');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const allowedOrigins = ['https://houbla-frontend.vercel.app'];
-
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Configuration de CORS pour autoriser toutes les requêtes (à des fins de débogage)
+app.use(cors());
 
 app.use(bodyParser.json());
 
 app.post('/save-json', (req, res) => {
-  const { email } = req.body;
-  // console.log('Received data:', req.body); // Log the received data
+    const { email } = req.body;
+    // console.log('Received data:', req.body); // Log the received data
 
-  if (!email) {
-    return res.status(400).send('Email is required');
-  }
-
-  const newUserData = {
-    email,
-    date: new Date().toISOString() // Ajouter la date de stockage
-  };
-
-  const filePath = './data/all-users-info.json';
-
-  fs.readFile(filePath, 'utf8', (err, fileData) => {
-    let usersData = [];
-    if (!err && fileData) {
-      try {
-        usersData = JSON.parse(fileData);
-      } catch (error) {
-        console.error('Error parsing existing JSON file:', error);
-      }
+    if (!email) {
+        return res.status(400).send('Email is required');
     }
 
-    usersData.push(newUserData);
+    const newUserData = {
+        email,
+        date: new Date().toISOString() // Ajouter la date de stockage
+    };
 
-    fs.writeFile(filePath, JSON.stringify(usersData, null, 2), 'utf8', (err) => {
-      if (err) {
-        console.error('Error writing JSON file:', err);
-        return res.status(500).send('Error saving data');
-      }
-      res.status(200).send('Data saved successfully');
+    const filePath = './data/all-users-info.json';
+
+    fs.readFile(filePath, 'utf8', (err, fileData) => {
+        let usersData = [];
+        if (!err && fileData) {
+            try {
+                usersData = JSON.parse(fileData);
+            } catch (error) {
+                console.error('Error parsing existing JSON file:', error);
+            }
+        }
+
+        usersData.push(newUserData);
+
+        fs.writeFile(filePath, JSON.stringify(usersData, null, 2), 'utf8', (err) => {
+            if (err) {
+                console.error('Error writing JSON file:', err);
+                return res.status(500).send('Error saving data');
+            }
+            res.status(200).send('Data saved successfully');
+        });
     });
-  });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 // const express = require('express');

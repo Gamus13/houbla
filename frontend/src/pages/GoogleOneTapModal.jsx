@@ -52,15 +52,21 @@ const GoogleOneTapModal = () => {
 
   const saveUsersInfoAsJSON = async (userInfo) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/save-json`, userInfo);
+      const apiUrl = `${process.env.REACT_APP_API_URL}/save-json`;
+      console.log('API URL:', apiUrl);  // Vérifiez l'URL dans la console
+      const response = await axios.post(apiUrl, userInfo, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       console.log('Save response:', response.data);
     } catch (error) {
       console.error('Error saving data:', error);
     }
   };
-  
 
   return null;
-};
+}; 
+
 
 export default GoogleOneTapModal;
