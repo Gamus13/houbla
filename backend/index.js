@@ -7,7 +7,13 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Configuration de CORS
-app.use(cors());
+const corsOptions = {
+    origin: 'https://houbla-frontend.vercel.app', // URL de votre frontend
+    methods: ['GET', 'POST'], // Méthodes autorisées
+    credentials: true, // Si vous utilisez des cookies ou des informations d'identification
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // Connexion à MongoDB
