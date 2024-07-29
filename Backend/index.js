@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
+const mongoose = require('mongoose');
+const User = require('./models/User'); // Assurez-vous que 'models' est en minuscule
+
 const port = process.env.PORT || 5844;
 const mongoURI = process.env.MONGO_URI;
-const { MongoClient, ServerApiVersion } = require("mongodb");
 
 // App
 const app = express();
@@ -12,33 +14,32 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Vérifiez si mongoURI est défini
-if (!mongoURI) {
-    console.error("Mongo URI is not defined. Please check your .env file.");
-    process.exit(1); // Arrêtez le processus si la variable n'est pas définie
-}
+// Connectez-vous à MongoDB
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log("Connected to MongoDB!"))
+    .catch(err => console.error("Error connecting to MongoDB:", err));
 
-// Mongo URI
-const client = new MongoClient(mongoURI, {
-    serverApi: {
-        version: ServerApiVersion.v1,
-        strict: true,
-        deprecationErrors: true,
-    },
+// Route pour sauvegarder les informations utilisateur
+app.post('/api/save-json', async (req, res) => {
+    const { email } = req.body; // Extraire l'email du corps de la requête
+
+    try {
+        // Vérifiez si l'utilisateur existe déjà
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: 'User already exists' });
+        }
+
+        const newUser = new User({ email }); // Créez une nouvelle instance du modèle
+        await newUser.save(); // Enregistrez l'utilisateur dans la base de données
+        res.status(201).json({ message: 'User information saved successfully!' });
+    } catch (error) {
+        console.error('Error saving user information:', error);
+        res.status(500).json({ message: 'Error saving user information' });
+    }
 });
 
-const run = async () => {
-    try {
-        await client.connect();
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
-        // Vous pouvez fermer la connexion si nécessaire
-    }
-}
-
-run().catch(error => console.error("Error connecting to MongoDB:", error));
-
+// Route de test
 app.get('/', (req, res) => {
     res.send('Car Junction Backend Server Running...');
 });
