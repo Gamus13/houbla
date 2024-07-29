@@ -68,7 +68,7 @@ import { useEffect, useState } from 'react';
 import { useGoogleOneTapLogin } from '@react-oauth/google';
 import axios from 'axios'; // Assurez-vous d'avoir axios installé
 import jwtDecode from 'jwt-decode'; // Assurez-vous d'utiliser la bonne importation
-import { useAuth } from './AuthContext'; // Importation du contexte d'authentification
+import { useAuth } from '../contexts/AuthContext'; // Importation du contexte d'authentification
 
 const GoogleOneTapModal = () => {
   const { addUser } = useAuth();
