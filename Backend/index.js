@@ -12,7 +12,9 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://houbla-frontend.vercel.app' // Autorisez cette origine spécifique
+}));
 
 // Connectez-vous à MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
