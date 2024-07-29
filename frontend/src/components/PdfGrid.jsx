@@ -9,14 +9,14 @@ const PdfGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Nombre d'éléments par page
 
-  console.log('isAuthenticated:', isAuthenticated);
+  // console.log('isAuthenticated:', isAuthenticated);
 
   const handleSearch = () => {
     if (!isAuthenticated) return; // Ne pas permettre la recherche si non authentifié
-    console.log('Search Query:', searchQuery); // Log pour vérifier la requête de recherche
+    // console.log('Search Query:', searchQuery); 
     const normalizedQuery = searchQuery.toLowerCase();
     const result = pdfFiles.filter(file => file.name.toLowerCase().includes(normalizedQuery));
-    console.log('Search Result:', result); // Log pour vérifier le résultat de la recherche
+    // console.log('Search Result:', result); 
 
     if (result.length > 0) {
       setSearchResult(result);
