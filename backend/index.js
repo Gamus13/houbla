@@ -1,107 +1,53 @@
 const express = require('express');
-const fs = require('fs');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configuration de CORS pour autoriser toutes les requêtes (à des fins de débogage)
+// Configuration de CORS
 app.use(cors());
-
 app.use(bodyParser.json());
 
-app.post('/save-json', (req, res) => {
+// Connexion à MongoDB
+const mongoURI = process.env.MONGODB_URI; // Assurez-vous de définir cette variable d'environnement
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+// Définition du modèle utilisateur
+const userSchema = new mongoose.Schema({
+    email: { type: String, required: true },
+    date: { type: Date, default: Date.now }
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Endpoint pour sauvegarder les données
+app.post('/api/save-json', async (req, res) => {
     const { email } = req.body;
-    // console.log('Received data:', req.body); // Log the received data
 
     if (!email) {
         return res.status(400).send('Email is required');
     }
 
-    const newUserData = {
-        email,
-        date: new Date().toISOString() // Ajouter la date de stockage
-    };
+    const newUser = new User({ email });
 
-    const filePath = './data/all-users-info.json';
+    try {
+        await newUser.save();
+        res.status(200).send('Data saved successfully');
+    } catch (error) {
+        console.error('Error saving data:', error);
+        res.status(500).send('Error saving data');
+    }
+});
 
-    fs.readFile(filePath, 'utf8', (err, fileData) => {
-        let usersData = [];
-        if (!err && fileData) {
-            try {
-                usersData = JSON.parse(fileData);
-            } catch (error) {
-                console.error('Error parsing existing JSON file:', error);
-            }
-        }
-
-        usersData.push(newUserData);
-
-        fs.writeFile(filePath, JSON.stringify(usersData, null, 2), 'utf8', (err) => {
-            if (err) {
-                console.error('Error writing JSON file:', err);
-                return res.status(500).send('Error saving data');
-            }
-            res.status(200).send('Data saved successfully');
-        });
+// Démarrer le serveur (uniquement pour le développement local)
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on http://localhost:${PORT}`);
     });
-});
+}
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-// const express = require('express');
-// const fs = require('fs');
-// const cors = require('cors');
-// const bodyParser = require('body-parser');
-// const app = express();
-// const PORT = 5000;
-
-// app.use(cors());
-// app.use(bodyParser.json());
-
-// app.get('/', (req, res) => {
-//     res.send('Welcome to the server!');
-// });
-
-// app.post('/save-json', (req, res) => {
-//     const { email } = req.body;
-//     // console.log('Received data:', req.body); // Log the received data
-
-//     if (!email) {
-//         return res.status(400).send('Email is required');
-//     }
-
-//     const newUserData = {
-//         email,
-//         date: new Date().toISOString() // Ajouter la date de stockage
-//     };
-
-//     const filePath = './data/all-users-info.json';
-
-//     fs.readFile(filePath, 'utf8', (err, fileData) => {
-//         let usersData = [];
-//         if (!err && fileData) {
-//             try {
-//                 usersData = JSON.parse(fileData);
-//             } catch (error) {
-//                 console.error('Error parsing existing JSON file:', error);
-//             }
-//         }
-
-//         usersData.push(newUserData);
-
-//         fs.writeFile(filePath, JSON.stringify(usersData, null, 2), 'utf8', (err) => {
-//             if (err) {
-//                 console.error('Error writing JSON file:', err);
-//                 return res.status(500).send('Error saving data');
-//             }
-//             res.status(200).send('Data saved successfully');
-//         });
-//     });
-// });
-
-// app.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });
+export default app; // Pour Vercel
