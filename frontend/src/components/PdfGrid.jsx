@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { pdfFiles } from './pdfFiles'; // Assurez-vous que le chemin est correct
 import { useAuth } from '../contexts/AuthContext';
@@ -16,6 +15,7 @@ const PdfGrid = () => {
     console.log('Search Query:', searchQuery); // Log pour vérifier la requête de recherche
     const normalizedQuery = searchQuery.toLowerCase();
     const result = pdfFiles.filter(file => file.name.toLowerCase().includes(normalizedQuery));
+    console.log('Search Result:', result); // Log pour vérifier le résultat de la recherche
     
     if (result.length > 0) {
       setSearchResult(result);
