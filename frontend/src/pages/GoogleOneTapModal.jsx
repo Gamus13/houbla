@@ -43,7 +43,7 @@ const GoogleOneTapModal = () => {
 
   const saveUsersInfoAsJSON = async (userInfo) => {
     try {
-        const apiUrl = '/api/save-json';
+        const apiUrl = 'https://houbla-backend.vercel.app/api/save-json'; // URL correcte du backend
         console.log('API URL:', apiUrl);  // Vérifiez l'URL dans la console
         const response = await axios.post(apiUrl, userInfo, {
             headers: {
@@ -54,10 +54,11 @@ const GoogleOneTapModal = () => {
     } catch (error) {
         console.error('Error saving data:', error);
     }
-};
-return null;
+  };
 
-};  // Fin de la fonction GoogleOneTapModal
+  return null;
+
+};  //
 
 
 export default GoogleOneTapModal;
