@@ -10,9 +10,10 @@ const PdfGrid = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4; // Nombre d'éléments par page
 
+  console.log('isAuthenticated:', isAuthenticated);
   const handleSearch = () => {
     if (!isAuthenticated) return; // Ne pas permettre la recherche si non authentifié
-
+    console.log('Search Query:', searchQuery); // Log pour vérifier la requête de recherche
     const normalizedQuery = searchQuery.toLowerCase();
     const result = pdfFiles.filter(file => file.name.toLowerCase().includes(normalizedQuery));
     
