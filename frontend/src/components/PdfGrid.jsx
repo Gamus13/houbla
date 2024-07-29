@@ -55,59 +55,67 @@ const PdfGrid = () => {
         </button>
       </div>
 
-      {searchResult === 'No book found' ? (
-        <p className="text-center text-2xl text-orange-500">{searchResult}</p>
+      {!isAuthenticated ? (
+        <p className="text-center text-2xl text-red-500 mb-4">
+          Please authenticate to search for documents.
+        </p>
       ) : (
         <>
-          <h1 className='text-2xl mb-4'>Our recently added documents :</h1>
-          {searchResult && (
-            <h2 className="text-center text-2xl font-bold mb-8">
-              Search Results
-            </h2>
+          {searchResult === 'No book found' ? (
+            <p className="text-center text-2xl text-orange-500">{searchResult}</p>
+          ) : (
+            <>
+              <h1 className='text-2xl mb-4'>Our recently added documents :</h1>
+              {searchResult && (
+                <h2 className="text-center text-2xl font-bold mb-8">
+                  Search Results
+                </h2>
+              )}
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                {currentItems.map((file, index) => {
+                  const imageName = file.name.replace('.pdf', ''); // Supprime l'extension .pdf pour obtenir le nom de l'image
+                  return (
+                    <div key={index} className="relative w-full max-w-xs mx-auto">
+                      <img
+                        src={`/images/${imageName}.jpg`} // Assurez-vous que les images sont dans le dossier public/images
+                        alt={imageName}
+                        className="w-full h-64 object-cover rounded-lg"
+                      />
+                      <a
+                        href={file.url} // Utiliser l'URL de Google Drive
+                        className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-2 py-1 rounded"
+                        download
+                      >
+                        Download
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Pagination */}
+              <div className="mt-4 flex justify-center space-x-2">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  className="p-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                <span className="flex items-center">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                  className="p-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            </>
           )}
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {currentItems.map((file, index) => {
-              const imageName = file.name.replace('.pdf', ''); // Supprime l'extension .pdf pour obtenir le nom de l'image
-              return (
-                <div key={index} className="relative w-full max-w-xs mx-auto">
-                  <img
-                    src={`/images/${imageName}.jpg`} // Assurez-vous que les images sont dans le dossier public/images
-                    alt={imageName}
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <a
-                    href={file.url} // Utiliser l'URL de Google Drive
-                    className="absolute bottom-2 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-2 py-1 rounded"
-                    download
-                  >
-                    Download
-                  </a>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Pagination */}
-          <div className="mt-4 flex justify-center space-x-2">
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="p-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <span className="flex items-center">
-              Page {currentPage} of {totalPages}
-            </span>
-            <button
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-              className="p-2 bg-blue-500 text-white rounded disabled:bg-gray-400"
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-          </div>
         </>
       )}
     </div>
