@@ -8,7 +8,7 @@ const Navbar = () => {
       <header className="flex justify-between items-center w-full p-4">
         <h1 className="text-3xl font-bold">Hoobla</h1>
         <div>
-          <button className="bg-blue-500 px-4 py-2 rounded">Upgrade To Pro</button>
+          
           <button className="bg-gray-700 px-4 py-2 rounded ml-2">Sign up</button>
         </div>
       </header>
